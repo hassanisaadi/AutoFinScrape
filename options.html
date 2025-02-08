@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Scraper Options</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Extension Settings</h2>
+
+    <label>Bank Website URL:</label>
+    <input type="url" id="bank-url" placeholder="https://your-bank.com">
+    
+    <label>Default Start Date:</label>
+    <input type="date" id="default-start-date">
+
+    <label>Default End Date:</label>
+    <input type="date" id="default-end-date">
+
+    <button id="save-options">Save Settings</button>
+    <p id="status" style="color: green;"></p>
+
+    <script src="options.js"></script>
+</body>
+</html>
