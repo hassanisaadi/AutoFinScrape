@@ -1,46 +1,74 @@
-document.getElementById("get-balance").addEventListener("click", () => {
+document.addEventListener("DOMContentLoaded", () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (!tabs.length) {
-            console.error("No active tab found.");
-            document.getElementById("balance-result").innerText = "Error: No active tab.";
-            return;
-        }
-
-        console.log("Sending message to content.js...");
-
-        chrome.tabs.sendMessage(tabs[0].id, { action: "extract_balance" }, (response) => {
-            if (chrome.runtime.lastError) {
-                console.error("Error sending message:", chrome.runtime.lastError);
-                document.getElementById("balance-result").innerText = "Error: Content script not loaded.";
-            } else if (response && response.balance) {
-                console.log("Balance response received:", response);
-                document.getElementById("balance-result").innerText = "Balance: " + response.balance;
-            } else {
-                document.getElementById("balance-result").innerText = "Failed to fetch balance.";
+        chrome.tabs.sendMessage(tabs[0].id, { action: "detect_bank" }, (response) => {
+            if (response && response.bank) {
+                document.getElementById("detected-bank").innerText = response.bank;
+                document.getElementById("bank-logo").src = `icons/${response.bank.toLowerCase()}_logo.svg`;
             }
         });
     });
-});
 
-
-
-document.getElementById("download").addEventListener("click", () => {
-    let startDate = document.getElementById("start-date").value;
-    let endDate = document.getElementById("end-date").value;
-
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, { action: "download_csv", startDate, endDate }, (response) => {
-            if (response?.success) {
-                alert("Downloading CSV...");
-            } else {
-                alert("Failed to download.");
-            }
+    document.getElementById("scrape").addEventListener("click", () => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { action: "scrape_accounts" });
         });
     });
-});
-document.addEventListener("DOMContentLoaded", function () {
-    chrome.storage.sync.get(["defaultStartDate", "defaultEndDate"], function (data) {
-        document.getElementById("start-date").value = data.defaultStartDate || "";
-        document.getElementById("end-date").value = data.defaultEndDate || "";
-    });
+
+    const downloadButton = document.getElementById("download");
+    if (downloadButton) {
+        downloadButton.addEventListener("click", () => {
+            const monthSelect = document.getElementById("month-select");
+
+            if (!monthSelect) {
+                console.error("Month selector element not found.");
+                return;
+            }
+
+            const selectedMonth = monthSelect.value;
+            if (!selectedMonth) {
+                console.error("No month selected. Please choose a month.");
+                return;
+            }
+
+            console.log(`Selected month: ${selectedMonth}`);
+
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                chrome.tabs.sendMessage(
+                    tabs[0].id,
+                    { action: "download_transactions", month: selectedMonth },
+                    (response) => {
+                        if (response && response.success) {
+                            console.log("Transactions downloaded successfully.");
+                        } else {
+                            console.error("Failed to download transactions.");
+                        }
+                    }
+                );
+            });
+        });
+    }
+
+    // document.getElementById("download").addEventListener("click", () => {
+    //     const monthSelect = document.getElementById("month-select");
+    //     const selectedMonth = monthSelect.value; // Ensure a valid selection
+
+    //     if (!selectedMonth) {
+    //         console.error("Invalid selectedMonth value: undefined+++");
+    //         return;
+    //     }
+
+    //     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    //         chrome.tabs.sendMessage(
+    //             tabs[0].id,
+    //             { action: "download_transactions", month: selectedMonth },
+    //             (response) => {
+    //                 if (response && response.success) {
+    //                     console.log("Transactions downloaded successfully.");
+    //                 } else {
+    //                     console.error("Failed to download transactions. Please check the bank page or try again.");
+    //                 }
+    //             }
+    //         );
+    //     });
+    // });
 });

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Bank Scraper Extension",
+  "name": "Auto Fin Scraper",
   "version": "1.0",
-  "description": "Extract balance and automate downloads from bank web apps",
+  "description": "Scrape account balances and transactions from RBC and TD banking websites.",
   "permissions": [
     "activeTab",
     "scripting",
@@ -11,7 +11,8 @@
     "webNavigation"
   ],
   "host_permissions": [
-    "*://*.royalbank.com/*"
+    "*://*.royalbank.com/*",
+    "*://*.td.com/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -24,11 +25,7 @@
       "128": "icons/icon128.png"
     }
   },
-  "content_scripts": [
-    {
-      "matches": ["https://royalbank.com/*"],
-      "js": ["content.js"]
-    }
-  ],
-  "options_page": "options.html"
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }
