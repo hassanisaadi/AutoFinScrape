@@ -3,23 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Scraper Options</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Auto Fin Scraper Options</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body>
-    <h2>Extension Settings</h2>
+<body class="container mt-4">
+    <h2 class="mb-4">Auto Fin Scraper Settings</h2>
 
-    <label>Bank Website URL:</label>
-    <input type="url" id="bank-url" placeholder="https://your-bank.com">
+    <form id="settings-form">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>General Settings</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="default-export-format" class="form-label">Default Export Format</label>
+                    <select id="default-export-format" class="form-select">
+                        <option value="json">JSON</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="auto-save-data" checked>
+                        <label class="form-check-label" for="auto-save-data">
+                            Automatically save scraped data
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="bank-settings">
+            <!-- Bank-specific settings will be dynamically added here -->
+            
+            <!-- RBC Settings -->
+            <div class="card mb-3" data-bank="RBC">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>Royal Bank of Canada (RBC)</h5>
+                    <span class="badge bg-success">Supported</span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Account Types to Include</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rbc-include-checking" checked>
+                            <label class="form-check-label" for="rbc-include-checking">
+                                Checking Accounts
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rbc-include-savings" checked>
+                            <label class="form-check-label" for="rbc-include-savings">
+                                Savings Accounts
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rbc-include-credit" checked>
+                            <label class="form-check-label" for="rbc-include-credit">
+                                Credit Cards
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rbc-include-investments" checked>
+                            <label class="form-check-label" for="rbc-include-investments">
+                                Investment Accounts
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CIBC Settings -->
+            <div class="card mb-3" data-bank="CIBC">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>Canadian Imperial Bank of Commerce (CIBC)</h5>
+                    <span class="badge bg-success">Supported</span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Account Types to Include</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="cibc-include-checking" checked>
+                            <label class="form-check-label" for="cibc-include-checking">
+                                Checking Accounts
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="cibc-include-savings" checked>
+                            <label class="form-check-label" for="cibc-include-savings">
+                                Savings Accounts
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="cibc-include-credit" checked>
+                            <label class="form-check-label" for="cibc-include-credit">
+                                Credit Cards
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="cibc-include-investments" checked>
+                            <label class="form-check-label" for="cibc-include-investments">
+                                Investment Accounts
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TD Settings -->
+            <div class="card mb-3" data-bank="TD">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>TD Canada Trust</h5>
+                    <span class="badge bg-warning">Partial Support</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">TD support is currently in development.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="button" id="reset-defaults" class="btn btn-outline-secondary">Reset to Defaults</button>
+            <button type="submit" id="save-options" class="btn btn-primary">Save Settings</button>
+        </div>
+    </form>
     
-    <label>Default Start Date:</label>
-    <input type="date" id="default-start-date">
-
-    <label>Default End Date:</label>
-    <input type="date" id="default-end-date">
-
-    <button id="save-options">Save Settings</button>
-    <p id="status" style="color: green;"></p>
+    <div class="alert alert-success mt-3 d-none" id="status">Settings saved!</div>
 
     <script src="options.js"></script>
 </body>
